@@ -100,3 +100,44 @@ print(filtro.to_string(index=False))
 
 print("\nPrimeros 10 tokens:")
 print(df.head(10).to_string(index=False))
+
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+
+# ==============================
+# CREAR CORPUS POR ORACIONES
+# ==============================
+corpus_lematizado = []
+
+for oracion in doc.sents:
+    lemas_oracion = [
+        token.lemma_.lower()
+        for token in oracion
+        if not token.is_punct and not token.is_space and not token.is_stop
+    ]
+    
+    if lemas_oracion:
+        corpus_lematizado.append(" ".join(lemas_oracion))
+
+print(f"\nTotal de oraciones: {len(corpus_lematizado)}")
+
+# ==============================
+# BAG OF WORDS
+# ==============================
+bow_vectorizer = CountVectorizer()
+X_bow = bow_vectorizer.fit_transform(corpus_lematizado)
+
+print("\n--- BAG OF WORDS ---")
+print(f"Dimensiones: {X_bow.shape}")
+print("Vocabulario (primeras 10):")
+print(bow_vectorizer.get_feature_names_out()[:10])
+
+# ==============================
+# TF-IDF
+# ==============================
+tfidf_vectorizer = TfidfVectorizer()
+X_tfidf = tfidf_vectorizer.fit_transform(corpus_lematizado)
+
+print("\n--- TF-IDF ---")
+print(f"Dimensiones: {X_tfidf.shape}")
+print("Vocabulario (primeras 10):")
+print(tfidf_vectorizer.get_feature_names_out()[:10])
