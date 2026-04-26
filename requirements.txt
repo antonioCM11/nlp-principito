@@ -10,6 +10,7 @@ cloudpathlib==0.23.0
 colorama==0.4.6
 confection==1.3.3
 cymem==2.0.13
+es_core_news_sm @ https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.8.0/es_core_news_sm-3.8.0-py3-none-any.whl#sha256=e451a83d6df79b87e9eed0cb553f03e99e36a3bab18a7b79f0dcfd1fdf875e12
 h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1
@@ -32,6 +33,8 @@ python-dateutil==2.9.0.post0
 regex==2026.4.4
 requests==2.33.1
 rich==15.0.0
+scikit-learn==1.8.0
+scipy==1.17.1
 setuptools==82.0.1
 shellingham==1.5.4
 six==1.17.0
@@ -41,6 +44,7 @@ spacy-legacy==3.0.12
 spacy-loggers==1.0.5
 srsly==2.5.3
 thinc==8.3.13
+threadpoolctl==3.6.0
 tqdm==4.67.3
 typer==0.25.0
 typing-inspection==0.4.2

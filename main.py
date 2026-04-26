@@ -141,3 +141,62 @@ print("\n--- TF-IDF ---")
 print(f"Dimensiones: {X_tfidf.shape}")
 print("Vocabulario (primeras 10):")
 print(tfidf_vectorizer.get_feature_names_out()[:10])
+
+from gensim.models import Word2Vec
+import multiprocessing
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# ==============================
+# PREPARAR DATOS PARA WORD2VEC
+# ==============================
+sentences = []
+
+for sent in doc.sents:
+    tokens = [
+        token.lemma_.lower()
+        for token in sent
+        if not token.is_stop and not token.is_punct and token.text.strip()
+    ]
+    if len(tokens) > 1:
+        sentences.append(tokens)
+
+print(f"\nOraciones para Word2Vec: {len(sentences)}")
+
+# ==============================
+# ENTRENAR MODELO
+# ==============================
+model_w2v = Word2Vec(
+    sentences,
+    vector_size=10,
+    window=5,
+    min_count=1,
+    workers=multiprocessing.cpu_count(),
+    seed=42
+)
+
+# ==============================
+# VISUALIZACIÓN 3D
+# ==============================
+vocabulario = list(model_w2v.wv.index_to_key)
+vectores = model_w2v.wv[vocabulario]
+
+pca = PCA(n_components=3)
+vectores_3d = pca.fit_transform(vectores)
+
+df = pd.DataFrame(vectores_3d, columns=['x', 'y', 'z'])
+df['palabra'] = vocabulario
+
+fig = plt.figure(figsize=(10, 7))
+ax = fig.add_subplot(111, projection='3d')
+
+ax.scatter(df['x'], df['y'], df['z'])
+
+for i, row in df.iterrows():
+    ax.text(row['x'], row['y'], row['z'], row['palabra'], size=8)
+
+ax.set_title("Word2Vec - Espacio Semántico 3D")
+
+plt.savefig("word2vec_3d.png")
+plt.show()
